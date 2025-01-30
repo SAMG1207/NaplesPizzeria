@@ -1,0 +1,33 @@
+﻿@model NapplesPizzeria.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard - Mesas";
+}
+
+<div class="container mt-4" id="container">
+    <h1 class="text-center mb-4">Mesas Disponibles</h1>
+
+    <div class="row">
+        @foreach(var table in Model.TableState){
+            <div class="col-3 mb-3">
+                
+                    <button 
+                        class="btn-primary p-1 w-50 rounded border-dark tableButtons"
+                        data-state="@table.Value"
+                        data-id="@table.Key">
+                        
+                        mesa: @table.Key 
+                    </button>
+           </div>
+        }
+        <div class="d-flex flex-column align-items-center justify-content-center mt-2">
+            <p class=" mb-2 text-center">Está trabajando sobre la mesa: <span id="span1"></span></p>
+            <button class="w-50 d-none" id="button1"></button>
+        </div>
+        
+
+    </div>
+ 
+
+</div>
+

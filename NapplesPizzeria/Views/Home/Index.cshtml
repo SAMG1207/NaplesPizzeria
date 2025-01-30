@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - NapplesPizzeria</title>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/NapplesPizzeria.styles.css" asp-append-version="true" />
+    </head>
+    <body>
+        <div class="container-fluid d-flex vh-100 fondo rounded border bg-dark">
+            <div class="row justify-content-center align-items-center w-100">
+                <div class="col-6 text-center bg-light border border-5 rounded p-4 bg-opacity-50">
+                    <h1>Welcome to NapplesPizzeria</h1>
+                    <h3>Please login to continue</h3>
+                    <form method="post" action="@Url.Action("Index", "Home")" class="d-flex flex-column align-items-center">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3 w-75">
+                            <label for="Username" class="form-label">Username:</label>
+                            <input class="form-control" id="Username" name="username" />
+                        </div>
+
+                        <div class="mb-3 w-75">
+                            <label for="Password" class="form-label">Password:</label>
+                            <input class="form-control" id="Password" type="password" name="password" />
+                            <span class="text-danger"></span>
+                        </div>
+
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-primary">Login</button>
+                        </div>
+                    </form>
+                            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                            {
+                                 <div class="alert alert-danger mt-3" role="alert">
+                                     @ViewBag.ErrorMessage
+                                 </div>
+                            }
+                </div>
+            </div>
+        </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - NapplesPizzeria
+        </div>
+    </footer>
+    </body>
+</html>
+
