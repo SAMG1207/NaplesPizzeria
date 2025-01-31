@@ -9,7 +9,7 @@ const container = document.getElementById('container');
 const buttons = document.querySelectorAll('.tableButtons');
 const button1 = document.getElementById('button1');
 const span1 = document.getElementById('span1');
-
+let isMenuOpen = false;
 
 
 const area = document.createElement('div');
@@ -41,8 +41,15 @@ function initEventListeners() {
     //Ver Menú
 
     botonMenu.addEventListener('click', async () => {
-        menuArea.innerHTML = '';
-        await loadProducts(menuArea);
+        if (!isMenuOpen) {
+            menuArea.innerHTML = '';
+            await loadProducts(menuArea);
+        }
+        else {
+            menuArea.innerHTML = '';
+        }
+        console.log(isMenuOpen)
+        isMenuOpen = !isMenuOpen;
     });
 }
 
@@ -54,7 +61,9 @@ function handleTableClick(button) {
 
 function UpdateTableState(tableState, tableId) {
     button1.classList.remove('d-none');
-    span1.innerText = `Está trabajando sobre la mesa: ${tableId}, esta mesa se encuentra: ${tableState == "False" ? "Disponible" : "Ocupada"}`;
+    span1.innerText =
+        `Está trabajando sobre la mesa: ${tableId}, 
+    esta mesa se encuentra: ${tableState == "False" ? "Disponible" : "Ocupada"}`;
 
     if (tableState === 'False') {
         button1.innerText = 'Abrir Mesa'

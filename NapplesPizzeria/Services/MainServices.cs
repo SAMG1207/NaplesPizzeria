@@ -60,6 +60,46 @@ namespace NapplesPizzeria.Services
                 return estadoTablas;
             }
         }
+
+        public bool postOrder(string direction, int table, int productId, int cuantity)
+        {
+            try
+            {
+                int upserts = 0;
+                using SqlConnection conn = new(_connectionString);
+                conn.Open();
+                using SqlTransaction transaction = conn.BeginTransaction();
+                using SqlCommand cmd = new("UpsertOrder", conn, transaction);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@svCommand", direction));
+                cmd.Parameters.Add(new SqlParameter("@inServiceFk" , table));
+                cmd.Parameters.Add(new SqlParameter("@inProductoFk", productId));
+                var outParam = new SqlParameter("@out_error", SqlDbType.NVarChar,4000)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(outParam);
+                
+                while(upserts < cuantity)
+                {
+                    cmd.ExecuteNonQuery();
+                    string result = outParam.Value?.ToString();
+                    if(result != "OK")
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                    upserts++;
+                }
+                
+                return true;
+            }
+            catch(Exception ex)
+            {
+                //Debera loggear
+                return false;
+            }
+        }
     }
 
 }

@@ -20,7 +20,6 @@ namespace NapplesPizzeria.Controllers
         }
 
         [HttpGet]
-
         public IActionResult Index()
         {
           
@@ -59,7 +58,8 @@ namespace NapplesPizzeria.Controllers
 
             var products = _context.MtabProducts
                 .Include(p => p.InMtProCategorieFkyNavigation)
-                .GroupBy(p => p.InMtProCategorieFkyNavigation != null ? p.InMtProCategorieFkyNavigation.SvMtCatName : "Sin Categoría")
+                .GroupBy(p => p.InMtProCategorieFkyNavigation != null ?
+                    p.InMtProCategorieFkyNavigation.SvMtCatName : "Sin Categoría")
                 .Select(
                     group => new
                     {
@@ -75,5 +75,35 @@ namespace NapplesPizzeria.Controllers
                 .ToList();
             return Json(products);
         }
+
+        [HttpPost]
+        public IActionResult PostOrder(int table, int productId, int cuantity)
+        {
+            string? username = HttpContext.Session.GetString("username");
+
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            try
+            {
+                bool result = _mainServices.postOrder("NEW", table, productId, cuantity);
+
+                if (result)
+                {
+                    return Ok(new { message = "Orden creada con éxito" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "Error al crear la orden" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error interno del servidor", error = ex.Message });
+            }
+        }
+
     }
 }

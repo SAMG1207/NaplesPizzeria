@@ -36,8 +36,10 @@ export default async function loadProducts(container) {
 
             categoria.products.forEach(product => {
                 const item = document.createElement('li');
+                const buttonOrder = document.createElement('button')
+                item.appendChild(buttonOrder);
                 item.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-                item.innerText = `${product.name} - ${product.price}`;
+                buttonOrder.innerText = `${product.name}`;
                 list.appendChild(item);
             });
         })
